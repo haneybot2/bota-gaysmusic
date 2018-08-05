@@ -245,35 +245,36 @@ client.on('message', message => {
   }
 });
 
+const adminprefix = "!";
 const developers = ["454527533279608852"]
 client.on('message', message => {
     var argresult = message.content.split(` `).slice(1).join(' ');
       if (!developers.includes(message.author.id)) return;
       
-  if (message.content.startsWith(prefix + 'pp')) {
+  if (message.content.startsWith(adminprefix + 'pp')) {
     client.user.setGame(argresult);
       message.channel.send(`**✅   ${argresult}**`)
   } else 
-     if (message.content === (prefix + "leave")) {
+     if (message.content === (adminprefix + "leave")) {
     message.guild.leave();        
   } else  
-  if (message.content.startsWith(prefix + 'wt')) {
+  if (message.content.startsWith(adminprefix + 'wt')) {
   client.user.setActivity(argresult, {type:'WATCHING'});
       message.channel.send(`**✅   ${argresult}**`)
   } else 
-  if (message.content.startsWith(prefix + 'ls')) {
+  if (message.content.startsWith(adminprefix + 'ls')) {
   client.user.setActivity(argresult , {type:'LISTENING'});
       message.channel.send(`**✅   ${argresult}**`)
   } else 
-  if (message.content.startsWith(prefix + 'st')) {
+  if (message.content.startsWith(adminprefix + 'st')) {
     client.user.setGame(argresult, "https://www.twitch.tv/idk");
       message.channel.send(`**✅**`)
   }
-  if (message.content.startsWith(prefix + 'setn')) {
+  if (message.content.startsWith(adminprefix + 'setn')) {
   client.user.setUsername(argresult).then
       message.channel.send(`Changing The Name To ..**${argresult}** `)
 } else
-if (message.content.startsWith(prefix + 'seta')) {
+if (message.content.startsWith(adminprefix + 'seta')) {
   client.user.setAvatar(argresult);
     message.channel.send(`Changing The Avatar To :**${argresult}** `);
 }
