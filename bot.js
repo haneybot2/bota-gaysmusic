@@ -245,7 +245,7 @@ function play(guild, song) {
 
 client.on('message', message => {
   if (message.content === '1join') {
-	      if(msg.member.hasPermission("MANAGE_MESSAGES"));
+		    if(!message.member.hasPermission("MANAGE_MESSAGES"));
     const channel = message.member.voiceChannel;
 
     channel.join()
