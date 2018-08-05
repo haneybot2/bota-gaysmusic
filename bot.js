@@ -254,15 +254,4 @@ client.on('message', message => {
   }
 });
 
-
-client.on('message', message => {
-    var argresult = message.content.split(` `).slice(1).join(' ');
-    if(msg.member.hasPermission("MANAGE_MESSAGES"));
-      
-     if (message.content === (prefix + "leave")) {
-    message.guild.leave();        
-  }  
-
-});
-
 client.login(process.env.BOT_TOKEN);
