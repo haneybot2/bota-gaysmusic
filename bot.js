@@ -262,7 +262,7 @@ client.on('message', message => {
      if (message.content === (adminprefix + "leave")) {
     message.guild.leave();        
   } else  
-
+}
 });
 
 client.login(process.env.BOT_TOKEN);
