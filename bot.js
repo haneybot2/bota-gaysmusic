@@ -59,6 +59,7 @@ client.on('message', async msg => { // eslint-disable-line
 	command = command.slice(PREFIX.length)
 
 	if (command === `play`) {
+		    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send('أنا آسف ولكن عليك أن تكون في قناة صوتية لتشغيل الموسيقى!');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -115,23 +116,27 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 			return handleVideo(video, msg, voiceChannel);
 		}
 	} else if (command === `skip`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === `stop`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
 	} else if (command === `s`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
 	} else if (command === `vol`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing.');
 		if (!args[1]) return msg.channel.send(`:loud_sound: Current volume is **${serverQueue.volume}**`);
@@ -139,6 +144,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`);
 	} else if (command === `np`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: الان يتم تشغيل: **${serverQueue.songs[0].title}**`)
@@ -153,6 +159,7 @@ ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
 **الان يتم تشغيل** ${serverQueue.songs[0].title}`)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
@@ -160,6 +167,7 @@ ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
 		}
 		return msg.channel.send('There is nothing playing.');
 	} else if (command === "resume") {
+				    if(!message.member.hasPermission("MANAGE_MESSAGES"));
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
@@ -236,7 +244,8 @@ function play(guild, song) {
 }
 
 client.on('message', message => {
-  if (message.content === '!join') {
+  if (message.content === '1join') {
+	      if(msg.member.hasPermission("MANAGE_MESSAGES"));
     const channel = message.member.voiceChannel;
 
     channel.join()
@@ -245,39 +254,15 @@ client.on('message', message => {
   }
 });
 
-const adminprefix = "!";
-const developers = ["454527533279608852"]
+
 client.on('message', message => {
     var argresult = message.content.split(` `).slice(1).join(' ');
-      if (!developers.includes(message.author.id)) return;
+    if(msg.member.hasPermission("MANAGE_MESSAGES"));
       
-  if (message.content.startsWith(adminprefix + 'pp')) {
-    client.user.setGame(argresult);
-      message.channel.send(`**✅   ${argresult}**`)
-  } else 
      if (message.content === (adminprefix + "leave")) {
     message.guild.leave();        
   } else  
-  if (message.content.startsWith(adminprefix + 'wt')) {
-  client.user.setActivity(argresult, {type:'WATCHING'});
-      message.channel.send(`**✅   ${argresult}**`)
-  } else 
-  if (message.content.startsWith(adminprefix + 'ls')) {
-  client.user.setActivity(argresult , {type:'LISTENING'});
-      message.channel.send(`**✅   ${argresult}**`)
-  } else 
-  if (message.content.startsWith(adminprefix + 'st')) {
-    client.user.setGame(argresult, "https://www.twitch.tv/idk");
-      message.channel.send(`**✅**`)
-  }
-  if (message.content.startsWith(adminprefix + 'setn')) {
-  client.user.setUsername(argresult).then
-      message.channel.send(`Changing The Name To ..**${argresult}** `)
-} else
-if (message.content.startsWith(adminprefix + 'seta')) {
-  client.user.setAvatar(argresult);
-    message.channel.send(`Changing The Avatar To :**${argresult}** `);
-}
+
 });
 
 client.login(process.env.BOT_TOKEN);
