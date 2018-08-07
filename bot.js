@@ -87,6 +87,12 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('تم إيقآف هذآ المقطع');
 		return undefined;
+	} else if (command === `s`) {
+		if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
+		if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لإيقآفه');
+		serverQueue.songs = [];
+		serverQueue.connection.dispatcher.end('تم إيقآف هذآ المقطع');
+		return undefined;
 	} else if (command === `vol`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء شغآل.');
