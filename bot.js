@@ -1,23 +1,14 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
-const { PREFIX , GOOGLE_API_KEY } = require('./config1');
+const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
+
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
-
-
-
-
-
-
-
-
-
-
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -43,9 +34,6 @@ client.on('ready', () => {
   console.log('')
   console.log('')
 });
-
-
-
 
 
 client.on('warn', console.warn);
@@ -98,12 +86,12 @@ client.on('message', async msg => { // eslint-disable-line
 			} catch (error) {
 				try {
 					var videos = await youtube.searchVideos(searchString, 5);
-					let copy = ".A-GUYS MUSIC";
+					    let copy = ".A-GUYS MUSIC";
 					let index = 0;
 					const embed1 = new Discord.RichEmbed()
 			        .setDescription(`**اختار رقم المقطع** :
 ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
-                                .setFooter(copy, client.user.avatarURL);
+                    .setFooter(copy, client.user.avatarURL);
 					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
 					
 					// eslint-disable-next-line max-depth
@@ -150,7 +138,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`);
-	} else if (command === `np`) {
+	} else if (command === `now`) {
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: الان يتم تشغيل: **${serverQueue.songs[0].title}**`)
@@ -171,7 +159,7 @@ ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
 			return msg.channel.send('تم إيقاف الموسيقى مؤقتا!');
 		}
 		return msg.channel.send('There is nothing playing.');
-	} else if (command === "resume") {
+	} else if (command === "unpause") {
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
@@ -199,7 +187,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 			voiceChannel: voiceChannel,
 			connection: null,
 			songs: [],
-			volume: 5,
+			volume: 4,
 			playing: true
 		};
 		queue.set(msg.guild.id, queueConstruct);
@@ -246,6 +234,7 @@ function play(guild, song) {
 
 	serverQueue.textChannel.send(`بدء تشغيل: **${song.title}**`);
 }
+
 
 client.on('message', message => {
   if (message.content === '!join') {
