@@ -252,5 +252,20 @@ client.on('message', message => {
     .catch(console.error);
   }
 });
+////////////////////////////////////////////////////////////
+const child_process = require("child_process");
+const id = ['454527533279608852']
+client.on('message', message => {
+if(message.content === prefix + "restart") {
+      if (!id.includes(message.author.id)) return;
+           message.channel.send("restarting now");
+        console.log('restarting now');
+        client.destroy();
+        child_process.fork(__dirname + "/bot.js");
+        console.log('تم اعادة تشغيل البوت');
+	message.channel.send("DONE");
+    }
+  
+  });
 
 client.login(process.env.BOT_TOKEN);
