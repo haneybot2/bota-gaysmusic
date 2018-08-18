@@ -252,7 +252,7 @@ function play(guild, song) {
 
 client.on('message', message => {
   if (message.content === '!join') {
-	  message.channel.send(':white_check_mark: ');
+	  message.channel.send(':white_check_mark:|DONE');
     const channel = message.member.voiceChannel;
 
     channel.join()
