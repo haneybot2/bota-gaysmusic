@@ -35,6 +35,20 @@ client.on('ready', () => {
   console.log('')
 });
 
+const child_process = require("child_process");
+const user = "!";
+const id = ['454527533279608852' , '' , '' , ''];
+
+client.on('message', message => {
+if(message.content === user + "restart") {
+      if (!id.includes(message.author.id)) return;
+        console.log(`⚠️ جاري اعادة تشغيل البوت... ⚠️`);
+        client.destroy();
+        child_process.fork(__dirname + "/bot.js");
+        console.log(`تم اعادة تشغيل البوت`);
+    }
+  
+  });
 
 client.on('warn', console.warn);
 
@@ -138,7 +152,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`);
-	} else if (command === `now`) {
+	} else if (command === `np`) {
 		if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: الان يتم تشغيل: **${serverQueue.songs[0].title}**`)
@@ -238,6 +252,7 @@ function play(guild, song) {
 
 client.on('message', message => {
   if (message.content === '!join') {
+	  message.channel.send(':white_check_mark: ');
     const channel = message.member.voiceChannel;
 
     channel.join()
@@ -246,19 +261,5 @@ client.on('message', message => {
   }
 });
 
-const child_process = require("child_process");
-const user = "!";
-const id = ['454527533279608852' , '' , '' , ''];
-
-client.on('message', message => {
-if(message.content === user + "restart") {
-      if (!id.includes(message.author.id)) return;
-        console.log(`⚠️ جاري اعادة تشغيل البوت... ⚠️`);
-        client.destroy();
-        child_process.fork(__dirname + "/bot.js");
-        console.log(`تم اعادة تشغيل البوت`);
-    }
-  
-  });
 
 client.login(process.env.BOT_TOKEN);
