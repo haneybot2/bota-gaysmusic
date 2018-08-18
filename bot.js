@@ -99,7 +99,7 @@ client.on('message', async msg => { // eslint-disable-line
 				var video = await youtube.getVideo(url);
 			} catch (error) {
 				try {
-					var videos = await youtube.searchVideos(searchString, 5);
+					var videos = await youtube.searchVideos(searchString, 6);
 					    let copy = ".A-GUYS MUSIC";
 					let index = 0;
 					const embed1 = new Discord.RichEmbed()
