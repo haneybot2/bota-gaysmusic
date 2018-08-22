@@ -1,10 +1,11 @@
-const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
-const client = new Discord.Client();
+const Discord = require("discord.js");
 const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
+const FFMPEG = require('ffmpeg');
 
+const client = new Client({ disableEveryone: true });
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
@@ -99,13 +100,13 @@ client.on('message', async msg => { // eslint-disable-line
 				var video = await youtube.getVideo(url);
 			} catch (error) {
 				try {
-					var videos = await youtube.searchVideos(searchString, 6);
-					    let copy = ".A-GUYS MUSIC";
+					var videos = await youtube.searchVideos(searchString, 5);
 					let index = 0;
 					const embed1 = new Discord.RichEmbed()
-		    .setTitle("**اختار رقم المقطع** :")
-		    .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
-                    .setFooter(copy, client.user.avatarURL);
+			        .setAuthor(`.A-GUYS Music`, `http://bl3rbe.net/up/qHnSfuc.png`)
+			        .setDescription(`**Song selection:**
+${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
+					.setFooter("")
 					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
 					
 					// eslint-disable-next-line max-depth
@@ -129,26 +130,20 @@ client.on('message', async msg => { // eslint-disable-line
 			return handleVideo(video, msg, voiceChannel);
 		}
 	} else if (command === `skip`) {
-		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
-		serverQueue.connection.dispatcher.end('Skip command has been used!');
+		if (!msg.member.voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
+		if (!serverQueue) return msg.channel.send('**There is nothing playing that I could skip for you.**');
+		serverQueue.connection.dispatcher.end('**Skip command has been used!**');
 		return undefined;
 	} else if (command === `stop`) {
-		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
+		if (!msg.member.voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
+		if (!serverQueue) return msg.channel.send('**There is nothing playing that I could stop for you.**');
 		serverQueue.songs = [];
-		serverQueue.connection.dispatcher.end('Stop command has been used!');
-		return undefined;
-	} else if (command === `s`) {
-		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
-		serverQueue.songs = [];
-		serverQueue.connection.dispatcher.end('Stop command has been used!');
+		serverQueue.connection.dispatcher.end('**Stop command has been used!**');
 		return undefined;
 	} else if (command === `vol`) {
-		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing.');
-		if (!args[1]) return msg.channel.send(`:loud_sound: Current volume is **${serverQueue.volume}**`);
+		if (!msg.member.voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
+		if (!serverQueue) return msg.channel.send('**There is nothing playing.**');
+		if (!args[1]) return msg.channel.send(`:loud_sound: __Current volume is__ **${serverQueue.volume}**`);
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: volume **${args[1]}**`);
@@ -156,9 +151,9 @@ client.on('message', async msg => { // eslint-disable-line
 		if (!serverQueue) return msg.channel.send('There is nothing on deck');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`:notes: Now playing: **${serverQueue.songs[0].title}**`)
+	.setFooter("")
 		return msg.channel.sendEmbed(embedNP);
-	} else if (command === `queue`) {
-		
+	} else if (command === `queue`) {		
 		if (!serverQueue) return msg.channel.send('There is nothing playing.');
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
@@ -233,7 +228,6 @@ function play(guild, song) {
 	const serverQueue = queue.get(guild.id);
 
 	if (!song) {
-		serverQueue.voiceChannel.leave();
 		queue.delete(guild.id);
 		return;
 	}
@@ -252,7 +246,6 @@ function play(guild, song) {
 	serverQueue.textChannel.send(`Starting: **${song.title}**`);
 }
 
-
 client.on('message', msg => {
 
     if (msg.content == '!join') {
@@ -264,6 +257,5 @@ client.on('message', msg => {
     }
 }
 })
-
 
 client.login(process.env.BOT_TOKEN);
