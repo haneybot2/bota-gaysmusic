@@ -4,13 +4,12 @@ const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 const FFMPEG = require('ffmpeg');
-
+const child_process = require("child_process");
+const dev = ['454527533279608852' , '' , '' , ''];
 const client = new Client({ disableEveryone: true });
-
 const youtube = new YouTube(GOOGLE_API_KEY);
-
 const queue = new Map();
-
+//console
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   console.log('')
@@ -35,14 +34,10 @@ client.on('ready', () => {
   console.log('')
   console.log('')
 });
-
-const child_process = require("child_process");
-const user = "!";
-const id = ['454527533279608852' , '' , '' , ''];
-
+//restart
 client.on('message', message => {
-if(message.content === user + "restart") {
-      if (!id.includes(message.author.id)) return;
+if(message.content ==="!restart") {
+      if (!dev.includes(message.author.id)) return;
         console.log(`⚠️ جاري اعادة تشغيل البوت... ⚠️`);
         client.destroy();
         child_process.fork(__dirname + "/bot.js");
@@ -103,8 +98,8 @@ client.on('message', async msg => { // eslint-disable-line
 					var videos = await youtube.searchVideos(searchString, 5);
 					let index = 0;
 					const embed1 = new Discord.RichEmbed()
-			        .setAuthor(`.A-GUYS Music`, `http://bl3rbe.net/up/qHnSfuc.png`)
-			        .setDescription(`**Song selection:**
+			        .setAuthor(`.A-GUYS`, `http://bl3rbe.net/up/qHnSfuc.png`)
+			        .setDescription(`**Song selection:** :
 ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 					.setFooter("")
 					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
@@ -140,6 +135,12 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('**Stop command has been used!**');
 		return undefined;
+	} else if (command === `s`) {
+		if (!msg.member.voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
+		if (!serverQueue) return msg.channel.send('**There is nothing playing that I could stop for you.**');
+		serverQueue.songs = [];
+		serverQueue.connection.dispatcher.end('**Stop command has been used!**');
+		return undefined;
 	} else if (command === `vol`) {
 		if (!msg.member.voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
 		if (!serverQueue) return msg.channel.send('**There is nothing playing.**');
@@ -153,7 +154,8 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 	.setDescription(`:notes: Now playing: **${serverQueue.songs[0].title}**`)
 	.setFooter("")
 		return msg.channel.sendEmbed(embedNP);
-	} else if (command === `queue`) {		
+	} else if (command === `queue`) {
+		
 		if (!serverQueue) return msg.channel.send('There is nothing playing.');
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
@@ -246,16 +248,19 @@ function play(guild, song) {
 	serverQueue.textChannel.send(`Starting: **${song.title}**`);
 }
 
-client.on('message', msg => {
+  client.on("message", async message => {
+    if (message.author.bot) return;
+    if (message.channel.type === "dm") return;
+    if (!message.member.voiceChannel) return message.channel.send('I can\'t find u in any voice channel')
+    let prefix = "!";
+    let messageArray = message.content.split(" ");
+    let command = messageArray[0];
 
-    if (msg.content == '!join') {
-        if (msg.member.voiceChannel) {
+if (command === `${prefix}join`) {
+        message.member.voiceChannel.join()
+    message.channel.send(':thumbsup: **Joined **')
+};
 
-     if (msg.member.voiceChannel.joinable) {
-         msg.member.voiceChannel.join().then(msg.react('✅'));
-     }
-    }
-}
-})
+});
 
 client.login(process.env.BOT_TOKEN);
