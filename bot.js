@@ -265,6 +265,7 @@ if (command === `!join`) {
 };
 
 });
+const child_process = require("child_process");
 client.on('message', message => {
 if(message.content === "!restart") {
   if (message.author.id !== "454527533279608852") return;
