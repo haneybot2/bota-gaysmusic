@@ -144,10 +144,11 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
-	  } else if (command === `join`) {
-                if (msg.client.voiceChannel) return msg.channel.send(`You can't Run this command if you are not in my voice channel!`);
-                if (!msg.member.voiceChannel) return msg.channel.send(`You can't Run A music commands if u are not in A voice Channel..`);
-                msg.member.voiceChannel.join().then(msg.channel.send(':thumbsup: **Joined**'));
+	} else if (command === `join`) {
+        if (msg.client.voiceChannel) return msg.channel.send(`You can't Run this command if you are not in my voice channel!`);
+
+        if (!msg.member.voiceChannel) return msg.channel.send(`You can't Run A music commands if u are not in A voice Channel!`);
+        msg.member.voiceChannel.join().then(msg.channel.send(':thumbsup: **Joined!**'));
 		return undefined;
 	} else if (command === 'vol') {
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
