@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
+const child_process = require("child_process");
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
@@ -71,6 +72,7 @@ client.on('message', async msg => { // eslint-disable-line
 	command = command.slice(PREFIX.length)
 
 	if (command === `play`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send('** You need to be in a voice channel :notes:**');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -127,23 +129,27 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 			return handleVideo(video, msg, voiceChannel);
 		}
 	} else if (command === `skip`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel!**');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could skip for you.**');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === `stop`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel!**');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you.**');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return msg.channel.send(`k :disappointed_relieved:`);
 	} else if (command === `s`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel!**');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you.**');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
-		return undefined;
+		return msg.channel.send(`k :disappointed_relieved:`);;
 	} else if (command === `vol`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return; 
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel!**');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing.**');
 		if (!args[1]) return msg.channel.send(`:loud_sound:** Current Volume:**${serverQueue.volume}`);
@@ -151,12 +157,13 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:speaker: **volume:**${args[1]}`);
 	} else if (command === `np`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing.**');
 		const embedNP = new Discord.RichEmbed()
 	.setDescription(`🎶 **${serverQueue.songs[0].title}**`)
 		return msg.channel.sendEmbed(embedNP);
 	} else if (command === `queue`) {
-		
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing.**');
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
@@ -169,6 +176,7 @@ ${serverQueue.songs.map(song => `[**${++index} **] ${song.title}`).join('\n')}
 		
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
@@ -176,10 +184,11 @@ ${serverQueue.songs.map(song => `[**${++index} **] ${song.title}`).join('\n')}
 		}
 		return msg.channel.send(':information_source: **There is nothing playing.**');
 	} else if (command === "resume") {
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
-			return msg.channel.send('**▶ Resumed the music for you!**');
+			return msg.channel.send('▶ **Resumed the music for you!**');
 		}
 		return msg.channel.send(':information_source: **There is nothing playing.**');
 	}
@@ -253,6 +262,7 @@ function play(guild, song) {
 
 client.on('message', msg => {
   if (msg.content === PREFIX + 'join') {
+	  if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         if (msg.member.voiceChannel) {
 	msg.channel.send(`:thumbsup: **Joined**`);
 
@@ -262,5 +272,16 @@ client.on('message', msg => {
     }
 }
 })
+
+client.on('message', message => {
+if(message.content === PREFIX + "restart") {
+      if(!message.author.id === '454527533279608852') return;
+        console.log(`⚠️ جاري اعادة تشغيل البوت... ⚠️`);
+        client.destroy();
+        child_process.fork(__dirname + "/bot.js");
+        console.log(`تم اعادة تشغيل البوت`);
+    }
+  
+  });
 
 client.login(process.env.BOT_TOKEN);
