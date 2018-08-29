@@ -1,14 +1,23 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const client = new Discord.Client();
-const { PREFIX , GOOGLE_API_KEY } = require('./config');
+const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const child_process = require("child_process");
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
+
+
+
+
+
+
+
+
+
+
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -36,6 +45,9 @@ client.on('ready', () => {
 });
 
 
+
+
+
 client.on('warn', console.warn);
 
 client.on('error', console.error);
@@ -44,7 +56,7 @@ client.on('ready', () => console.log('Yo this ready!'));
 
 // client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
 
-// client.on('reconnecting', () => console.log('I am reconnecting now!'));
+client.on('reconnecting', () => console.log('I am reconnecting now!'));
 
 client.on('message', async msg => { // eslint-disable-line
 	if (msg.author.bot) return undefined;
@@ -59,7 +71,7 @@ client.on('message', async msg => { // eslint-disable-line
 	command = command.slice(PREFIX.length)
 
 	if (command === `play`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return; 
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send(':x:** You need to be in a voice channel**!');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -80,7 +92,7 @@ client.on('message', async msg => { // eslint-disable-line
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
 				await handleVideo(video2, msg, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
-			return msg.channel.send("✅ `${playlist.title}` Added to **.A-Queue**!");
+			return msg.channel.send(`✅ **${playlist.title}** Added to **.A-Queue**!`);
 		} else {
 			try {
 				var video = await youtube.getVideo(url);
@@ -116,20 +128,20 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 			return handleVideo(video, msg, voiceChannel);
 		}
 	} else if (command === `skip`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return; 
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could skip for you**.');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === `stop`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return; 
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you**.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return msg.channel.send('k :disappointed_relieved:');
 	} else if (command === `s`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return; 
+		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you**.');
 		serverQueue.songs = [];
@@ -138,7 +150,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 	} else if (command === `vol`) {
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing.');
+		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		if (!args[1]) return msg.channel.send(`:speaker: **Current volume is** ${serverQueue.volume}`);
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
@@ -156,7 +168,6 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
 	.setDescription(`**Songs Queue**
-
 ${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
@@ -243,26 +254,5 @@ function play(guild, song) {
 
 	serverQueue.textChannel.send(`:white_check_mark: .A-Music playing **${song.title}**`);
 }
-
-client.on('message', msg => {
-  if (msg.content === PREFIX + 'join') {
-    if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
-    const channel = msg.member.voiceChannel;    
-    channel.join()
-    .then(connection => console.log('Connected!'))
-    .catch(console.error);
-    return msg.channel.send(':thumbsup: **Joined**');
-  }
-});
-client.on('message', msg => {
-if(msg.content === PREFIX + "restart") {
-      if(!msg.author.id === '452292328569307137') return;
-        console.log(`⚠️ جاري اعادة تشغيل البوت... ⚠️`);
-        client.destroy();
-        child_process.fork(__dirname + "/bot.js");
-        console.log(`تم اعادة تشغيل البوت`);
-    }
-  
-  });
 
 client.login(process.env.BOT_TOKEN);
