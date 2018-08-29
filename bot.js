@@ -91,7 +91,7 @@ client.on('message', async msg => { // eslint-disable-line
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
 				await handleVideo(video2, msg, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
-			return msg.channel.send(`✅``${playlist.title}`` has been added to **.A-Queue**!`);
+			return msg.channel.send(`✅**${playlist.title}** has been added to **.A-Queue**!`);
 		} else {
 			try {
 				var video = await youtube.getVideo(url);
@@ -223,7 +223,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
 		if (playlist) return undefined;
-		else return msg.channel.send(`✅ **${song.title}** has been added to **.A-Queue**!`);
+		else return msg.channel.send(`✅ ``${song.title}`` has been added to **.A-Queue**!`);
 	}
 	return undefined;
 }
