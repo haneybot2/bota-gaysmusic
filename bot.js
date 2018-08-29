@@ -4,6 +4,7 @@ const client = new Discord.Client();
 const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
+const child_process = require("child_process");
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
@@ -143,6 +144,11 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return undefined;
+	  } else if (command === `join`) {
+                if (msg.client.voiceChannel) return msg.channel.send(`You can't Run this command if you are not in my voice channel!`);
+                if (!msg.member.voiceChannel) return msg.channel.send(`You can't Run A music commands if u are not in A voice Channel..`);
+                msg.member.voiceChannel.join().then(msg.channel.send(':thumbsup: **Joined**'));
+		return undefined;
 	} else if (command === 'vol') {
 		if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
 		if (!serverQueue) return msg.channel.send('There is nothing playing.');
@@ -250,22 +256,6 @@ function play(guild, song) {
 
 	serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
 }
-
-client.on("message", async message => {
-    if (message.author.bot) return;
-    if (message.channel.type === "dm") return;
-    if (!message.member.voiceChannel) return;
-    let messageArray = message.content.split(" ");
-    let command = messageArray[0];
-
-if (command === `!join`) {
-
-        message.member.voiceChannel.join()
-    message.channel.send(':thumbsup: **Joined**')
-};
-
-});
-const child_process = require("child_process");
 client.on('message', message => {
 if(message.content === "!restart") {
   if (message.author.id !== "454527533279608852") return;
