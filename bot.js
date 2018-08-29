@@ -232,7 +232,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
 		if (playlist) return undefined;
-		else return msg.channel.send(`✅ ``${song.title}`` has been added to **.A-Queue**!`);
+		else return msg.channel.send(`✅ **${song.title}** has been added to **.A-Queue**!`);
 	}
 	return undefined;
 }
