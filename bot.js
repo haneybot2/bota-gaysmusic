@@ -54,7 +54,7 @@ client.on('error', console.error);
 
 client.on('ready', () => console.log('Yo this ready!'));
 
-// client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
+client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
 
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
 
@@ -151,7 +151,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
-		if (!args[1]) return msg.channel.send(`:speaker: **Current volume is** ${serverQueue.volume}`);
+		if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`);
 		serverQueue.volume = args[1];
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`);
@@ -159,16 +159,18 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		const embedNP = new Discord.RichEmbed()
-	.setDescription(`🎶 Now playing :
-                  **${serverQueue.songs[0].title}**`)
+	.addField('🎶 Now playing :' , `${serverQueue.songs[0].title}`,true)
 		return msg.channel.sendEmbed(embedNP);
 	} else if (command === `queue`) {
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
-	.setDescription(`**Songs Queue**
-${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
+	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
+	.setTitle(".A-Queue List :")
+	.addField('__**Now Playing__**  :musical_note: ' , `${serverQueue.songs[0].title}`,true)
+	.addField(':musical_score:  __**UP NEXT__** :musical_score: ' , `${serverQueue.songs[0].title}`,true)
+	.setDescription(`${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
