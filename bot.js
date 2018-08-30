@@ -4,20 +4,8 @@ const client = new Discord.Client();
 const { PREFIX, GOOGLE_API_KEY } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-
 const youtube = new YouTube(GOOGLE_API_KEY);
-
 const queue = new Map();
-
-
-
-
-
-
-
-
-
-
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -43,22 +31,12 @@ client.on('ready', () => {
   console.log('')
   console.log('')
 });
-
-
-
-
-
 client.on('warn', console.warn);
-
 client.on('error', console.error);
-
 client.on('ready', () => console.log('Yo this ready!'));
-
-client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
-
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
 
-client.on('message', async msg => { // eslint-disable-line
+client.on('message', async msg => { 
 	if (msg.author.bot) return undefined;
 	if (!msg.content.startsWith(PREFIX)) return undefined;
 
@@ -107,7 +85,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 					.setFooter("")
 					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
 					
-					// eslint-disable-next-line max-depth
+					
 					try {
 						var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
 							maxMatches: 1,
@@ -167,9 +145,9 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
-	.setTitle(".A-Queue List :")
-	.addField('__**Now Playing__**  :musical_note: ' , `${serverQueue.songs[0].title}`,true)
-	.addField(':musical_score:  __**UP NEXT__** :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`,true)
+	.setTitle("**.A-Queue List :**")
+	.addField('__Now Playing__  :musical_note: ' , `${serverQueue.songs[0].title}`,true)
+	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`,true)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
