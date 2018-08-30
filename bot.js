@@ -59,7 +59,7 @@ client.on('message', async msg => {
 	command = command.slice(PREFIX.length)
 
 	if (command === `play`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		const voiceChannel = msg.member.voiceChannel;
 		if (!voiceChannel) return msg.channel.send(':x:** You need to be in a voice channel**!');
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -80,7 +80,7 @@ client.on('message', async msg => {
 				const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
 				await handleVideo(video2, msg, voiceChannel, true); // eslint-disable-line no-await-in-loop
 			}
-			return msg.channel.send(`✅ **${playlist.title}** Added to **.A-Queue**!`);
+			return msg.channel.send(`:white_check_mark: **${playlist.title}** Added to **.A-Queue**!`);
 		} else {
 			try {
 				var video = await youtube.getVideo(url);
@@ -116,27 +116,27 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 			return handleVideo(video, msg, voiceChannel);
 		}
 	} else if (command === `skip`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could skip for you**.');
 		serverQueue.connection.dispatcher.end('Skip command has been used!');
 		return undefined;
 	} else if (command === `stop`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you**.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return msg.channel.send('k :disappointed_relieved:');
 	} else if (command === `s`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing that I could stop for you**.');
 		serverQueue.songs = [];
 		serverQueue.connection.dispatcher.end('Stop command has been used!');
 		return msg.channel.send('k :disappointed_relieved:');
 	} else if (command === `vol`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!msg.member.voiceChannel) return msg.channel.send(':x:**You are not in a voice channel**!');
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`);
@@ -144,13 +144,13 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
 		return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`);
 	} else if (command === `np`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		const embedNP = new Discord.RichEmbed()
 	.addField('🎶 Now playing :' , `${serverQueue.songs[0].title}`,true)
 		return msg.channel.sendEmbed(embedNP);
 	} else if (command === `queue`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.');
 		let index = 0;
 		const embedqu = new Discord.RichEmbed()
@@ -160,7 +160,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (serverQueue && serverQueue.playing) {
 			serverQueue.playing = false;
 			serverQueue.connection.dispatcher.pause();
@@ -168,7 +168,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 		}
 		return msg.channel.send(':information_source: **There is nothing playing**.');
 	} else if (command === "resume") {
-		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+		if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
 		if (serverQueue && !serverQueue.playing) {
 			serverQueue.playing = true;
 			serverQueue.connection.dispatcher.resume();
@@ -216,7 +216,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 		serverQueue.songs.push(song);
 		console.log(serverQueue.songs);
 		if (playlist) return undefined;
-		else return msg.channel.send(`✅ **${song.title}** Added to **.A-Queue**!`);
+		else return msg.channel.send(`:white_check_mark: **${song.title}** Added to **.A-Queue**!`);
 	}
 	return undefined;
 }
