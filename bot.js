@@ -169,8 +169,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
 	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
 	.setTitle(".A-Queue List :")
 	.addField('__**Now Playing__**  :musical_note: ' , `${serverQueue.songs[0].title}`,true)
-	.addField(':musical_score:  __**UP NEXT__** :musical_score: ' , `${serverQueue.songs[0].title}`,true)
-	.setDescription(`${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
+	.addField(':musical_score:  __**UP NEXT__** :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`,true)
 		return msg.channel.sendEmbed(embedqu);
 	} else if (command === `pause`) {
 		if(!msg.member.hasPermission('MANAGE_MESSAGES')) return;
