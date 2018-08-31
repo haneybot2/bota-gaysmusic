@@ -84,7 +84,7 @@ client.on('message', async msg => { // eslint disable line
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
-                    .setAuthor(`.A-Music`, `./a-guys.png`)
+                    .setAuthor(`.A-Music`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
                     .setDescription(`**Song selection** :
 ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
@@ -140,7 +140,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
         if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
 	const embedqu = new Discord.RichEmbed()
 	.setColor('BLACK')
-	.setAuthor(`.A-Queue`, `./a-guys.png`)
+	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
 	.setTitle("**.A-Queue List :**")
 	.addField('__Now Playing__  :musical_note: ' , `${serverQueue.songs[0].title}`,true)
 	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
