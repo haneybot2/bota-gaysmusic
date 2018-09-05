@@ -139,7 +139,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
     }  else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
-        if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(':information_source: **no_more_queue**.').then(message =>{message.delete(5000)})
 	let index = 0;
 		const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
@@ -153,9 +153,9 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
         if (serverQueue && serverQueue.playing) {
             serverQueue.playing = false;
         serverQueue.connection.dispatcher.pause();
-        return msg.channel.send(':pause_button: **Paused the music for you**!')
+        return msg.channel.send(':arrow_forward: **Paused the music for you**!')
         }
-        return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(2000)})
+        return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
     } else if (msg.content.startsWith(`${PREFIX}resume`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}resume command in ${msg.guild.name}`);
