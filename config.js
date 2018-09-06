@@ -1,4 +1,3 @@
-exports.DEV = '454527533279608852';
 
 exports.PREFIX = '!';
 
