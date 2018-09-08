@@ -220,7 +220,7 @@ function play(guild, song) {
     if (!song) {
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
-        return;
+        return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
     }
 
     const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
@@ -228,7 +228,6 @@ function play(guild, song) {
             console.log('Song ended.');
             serverQueue.songs.shift();
             play(guild, serverQueue.songs[0]);
-	    return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
         })
         .on('error', error => console.log(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
