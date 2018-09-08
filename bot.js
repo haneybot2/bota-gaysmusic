@@ -105,7 +105,7 @@ client.on('message', async msg => { // eslint disable line
                     var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
                 } catch (err) {
                     console.error(err);
-                    return msg.channel.send(":X: **I don`t get any search result**.").then(message =>{message.delete(5000)})
+                    return msg.channel.send(":x:  **I don`t get any search result**.").then(message =>{message.delete(5000)})
                 }
             }
 
@@ -125,7 +125,7 @@ client.on('message', async msg => { // eslint disable line
         if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could stop for you**.").then(message =>{message.delete(5000)})
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end('Stop command has been used!');
-        return msg.channel.send('k :disappointed_relieved:');
+        return msg.channel.send('k :cry:');
     } else if (msg.content.startsWith(`${PREFIX}vol`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}volume command in ${msg.guild.name}`);
@@ -146,19 +146,19 @@ client.on('message', async msg => { // eslint disable line
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
         if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue**.').then(message =>{message.delete(5000)})
 	let index = 0;
-		const embedqu = new Discord.RichEmbed()
+	const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
 	.setTitle("**.A-Queue List :**")
 	.addField('__Now Playing__  :musical_note: ' , `**${serverQueue.songs[0].title}**`,true)
 	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
-		return msg.channel.sendEmbed(embedqu);
+	return msg.channel.sendEmbed(embedqu);
      }  else if (msg.content.startsWith(`${PREFIX}pause`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}pause command in ${msg.guild.name}`);
         if (serverQueue && serverQueue.playing) {
             serverQueue.playing = false;
         serverQueue.connection.dispatcher.pause();
-        return msg.channel.send(':arrow_forward: **Paused the music for you**!')
+        return msg.channel.send('k :unamused:')
         }
         return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
     } else if (msg.content.startsWith(`${PREFIX}resume`)) {
@@ -168,7 +168,7 @@ client.on('message', async msg => { // eslint disable line
         if (serverQueue && !serverQueue.playing) {
             serverQueue.playing =  true;
             serverQueue.connection.dispatcher.resume();
-            return msg.channel.send(':arrow_forward: **Resumed the music for you**!')
+            return msg.channel.send('k :slight_smile:')
         }
         return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
     }
