@@ -140,7 +140,7 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
         console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
         msg.member.voiceChannel.join().then(connection => console.log('Connected!')).catch(console.error);
-	return msg.channel.send(`:thumbsup: **Joind**.`);
+	return msg.channel.send(`:white_check_mark: **Joind**.`);
     }  else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
