@@ -134,11 +134,17 @@ ${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
         if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`)
         serverQueue.volume = args[1];
         serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 5);
-        return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`)
+        return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`);
+    } else if (msg.content.startsWith(`${PREFIX}join`)) {
+	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+        console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
+        if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
+        msg.member.voiceChannel.join().then(connection => console.log('Connected!')).catch(console.error);
+	return msg.channel.send(`:thumbsup: **Joind**.`);
     }  else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
-        if (!serverQueue) return msg.channel.send(':information_source: **no_more_queue**.').then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue**.').then(message =>{message.delete(5000)})
 	let index = 0;
 		const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
@@ -196,7 +202,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
             } catch (error) {
-                console.error(`I could not join the voice channel: ${error}`);
+                console.error(`I could not join the voice channel: **${error}**`);
                 queue.delete(msg.guild.id);
                 return msg.channel.send(`I could not join the voice channel: **${error}**!`);
             }
