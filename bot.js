@@ -85,8 +85,8 @@ client.on('message', async msg => { // eslint disable line
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
                     .setAuthor(`.A-Music`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
-                    .setDescription(`**Song selection** :
-${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
+		    .setTitle(`**Song selection** :`)
+                    .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
 		    
 					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
