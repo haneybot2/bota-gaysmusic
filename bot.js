@@ -63,13 +63,13 @@ client.on('message', async msg => { // eslint disable line
         if (!voiceChannel) return msg.channel.send(":x:** You need to be in a voice channel**!");
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
 		if (!permissions.has('CONNECT')) {
-            return msg.channel.send(":no_entry_sign: **I am unable to connect **!");
+                        return msg.channel.send(":no_entry_sign: **I am unable to connect **!");
 		}
 		if (!permissions.has('SPEAK')) {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
                 }
 	        if (!argsnot[0]) {
-                          return msg.channel.send("**:x: Please specify a filename.**");
+                        return msg.channel.send("**:x: Please specify a filename.**");
                 }
         
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
@@ -94,7 +94,7 @@ client.on('message', async msg => { // eslint disable line
                     .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
 		    
-					msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
+			msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000); msg.delete(5000);})
                     // eslint-disable-next-line max-depth
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
