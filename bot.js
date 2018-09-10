@@ -67,7 +67,8 @@ client.on('message', async msg => { // eslint disable line
 		if (!permissions.has('SPEAK')) {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
         }
-	       if(!args[0]) {
+	 let argsnot = msg.content.split(" ").slice(1);
+	       if(!argsnot[0]) {
                           msg.channel.send("**:x: Please specify a filename.**");
                           return;
         }
