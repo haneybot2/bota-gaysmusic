@@ -94,7 +94,7 @@ client.on('message', async msg => { // eslint disable line
                     .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
 		    
-			msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000); msg.delete(5000);})
+			msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
                     // eslint-disable-next-line max-depth
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
