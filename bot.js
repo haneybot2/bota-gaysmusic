@@ -190,7 +190,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 voiceChannel: voiceChannel,
                 connection: null,
                 songs: [],
-                volume: 5,
+                volume: 100,
                 playing: true
             };
             queue.set(msg.guild.id, queueConstruct);
@@ -230,7 +230,7 @@ function play(guild, song) {
             play(guild, serverQueue.songs[0]);
         })
         .on('error', error => console.log(error));
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 200);
 
     serverQueue.textChannel.send(`:white_check_mark: .A-Music playing **${song.title}**`)
 }
