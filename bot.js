@@ -133,7 +133,7 @@ client.on('message', async msg => { // eslint disable line
         if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
         if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`)
         serverQueue.volume = args[1];
-        serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 200);
+        serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 100);
         return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`);
     } else if (msg.content.startsWith(`${PREFIX}join`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -230,7 +230,7 @@ function play(guild, song) {
             play(guild, serverQueue.songs[0]);
         })
         .on('error', error => console.log(error));
-    dispatcher.setVolumeLogarithmic(serverQueue.volume / 200);
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 100);
 
     serverQueue.textChannel.send(`:white_check_mark: .A-Music playing **${song.title}**`)
 }
