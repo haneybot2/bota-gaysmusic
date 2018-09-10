@@ -85,7 +85,7 @@ client.on('message', async msg => { // eslint disable line
                 var video = await youtube.getVideo(url);
             } catch (error) {
                 try {
-		    msg.member.voiceChannel.join().then(connection => console.log('Connected!'));
+		    voiceChannel.join().then(connection => console.log('Connected!'));
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
