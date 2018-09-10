@@ -67,6 +67,10 @@ client.on('message', async msg => { // eslint disable line
 		if (!permissions.has('SPEAK')) {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
         }
+	       if(!args[0]) {
+                          msg.channel.send("**:x: Please specify a filename.**");
+                          return;
+        }
         
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await youtube.getPlaylist(url);
@@ -81,6 +85,7 @@ client.on('message', async msg => { // eslint disable line
                 var video = await youtube.getVideo(url);
             } catch (error) {
                 try {
+		    msg.member.voiceChannel.join().then(connection => console.log('Connected!'))
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
@@ -176,7 +181,6 @@ client.on('message', async msg => { // eslint disable line
     return undefined;
 });
 
-
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
     const serverQueue = queue.get(msg.guild.id);
         const song = {
@@ -190,7 +194,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 voiceChannel: voiceChannel,
                 connection: null,
                 songs: [],
-                volume: 100,
+                volume: 50,
                 playing: true
             };
             queue.set(msg.guild.id, queueConstruct);
