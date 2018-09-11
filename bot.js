@@ -198,7 +198,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             queueConstruct.songs.push(song);
 
             try {
-		msg.delete(20000);
+		msg.delete();
                 var connection = await voiceChannel.join();
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
