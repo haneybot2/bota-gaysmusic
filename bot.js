@@ -46,7 +46,6 @@ client.on('disconnect', () => console.log('I just disconnected, making sure you 
 
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
 
-
 client.on('message', async msg => { 
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(PREFIX)) return undefined;
@@ -104,13 +103,13 @@ client.on('message', async msg => {
                         });
                     } catch (err) {
                         console.error(err);
-                        return msg.channel.send(':information_source: **No song selected to play**.').then(message =>{message.delete(5000)})
+                        return msg.channel.send(':information_source: **No song selected to play.**').then(message =>{message.delete(5000)})
                     }
                     const videoIndex = (response.first().content);
                     var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
                 } catch (err) {
                     console.error(err);
-                    return msg.channel.send(":x:  **I don`t get any search result**.").then(message =>{message.delete(5000)})
+                    return msg.channel.send(":x:  **I don`t get any search result.**").then(message =>{message.delete(5000)})
                 }
             }
 
@@ -120,22 +119,31 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}skip command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
-        if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could skip for you**.").then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could skip for you.**").then(message =>{message.delete(5000)})
         serverQueue.connection.dispatcher.end();
         return undefined;
     } else if (msg.content.startsWith(`${PREFIX}stop`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}stop command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
-        if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could stop for you**.").then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could stop for you.**").then(message =>{message.delete(5000)})
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end('Stop command has been used!');
         return msg.channel.send('k :cry:');
+    } else if (msg.content.startsWith(`${PREFIX}join`)) {
+	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
+        console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
+        if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
+	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch (error) {
+                console.error(`I could not join the voice channel: **${error}**`);
+                return msg.channel.send(`I could not join the voice channel: **${error}**!`);
+	}
+        return msg.channel.send('**:white_check_mark: Joind.**');
     } else if (msg.content.startsWith(`${PREFIX}vol`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}volume command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
-        if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing.**').then(message =>{message.delete(5000)})
         if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`)
         serverQueue.volume = args[1];
         serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 100);
@@ -143,7 +151,7 @@ client.on('message', async msg => {
     } else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
-        if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue**.').then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue.**').then(message =>{message.delete(5000)})
 	let index = 0;
 	const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://goo.gl/jHxBTt`)
@@ -159,7 +167,7 @@ client.on('message', async msg => {
         serverQueue.connection.dispatcher.pause();
         return msg.channel.send('k :unamused:')
         }
-        return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
+        return msg.channel.send(':information_source: **There is nothing playing.**').then(message =>{message.delete(5000)})
     } else if (msg.content.startsWith(`${PREFIX}resume`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}resume command in ${msg.guild.name}`);
@@ -169,7 +177,7 @@ client.on('message', async msg => {
             serverQueue.connection.dispatcher.resume();
             return msg.channel.send('k :slight_smile:')
         }
-        return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
+        return msg.channel.send(':information_source: **There is nothing playing.**').then(message =>{message.delete(5000)})
     }
 
     return undefined;
