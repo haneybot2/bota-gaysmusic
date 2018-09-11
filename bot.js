@@ -59,7 +59,6 @@ client.on('message', async msg => {
     if (msg.content.startsWith(`${PREFIX}play`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}play command in ${msg.guild.name}`);
-
         const voiceChannel = msg.member.voiceChannel;
         if (!voiceChannel) return msg.channel.send(":x:** You need to be in a voice channel**!");
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -156,7 +155,7 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}pause command in ${msg.guild.name}`);
         if (serverQueue && serverQueue.playing) {
-            serverQueue.playing = false;
+        serverQueue.playing = false;
         serverQueue.connection.dispatcher.pause();
         return msg.channel.send('k :unamused:')
         }
@@ -173,7 +172,7 @@ client.on('message', async msg => {
         return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
     }
 
-    return undefined;
+    return msg.channel.send(`tt1`);
 });
 
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
@@ -198,6 +197,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             queueConstruct.songs.push(song);
 
             try {
+		(msg =>{msg.delete()})
                 var connection = await voiceChannel.join();
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
@@ -211,7 +211,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             if (playlist) return undefined;
             else return msg.channel.send(`:white_check_mark: \`\`${song.title}\`\` Added to **.A-Queue**!`)
         }
-        return undefined;
+        return msg.channel.send(`tt2`);
 }
 
 function play(guild, song) {
