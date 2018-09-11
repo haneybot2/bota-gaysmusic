@@ -1,16 +1,15 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
 const { PREFIX, GOOGLE_API_KEY } = require('./config.js');
+const getYoutubeID = require('get-youtube-id');
+const fetchVideoInfo = require('youtube-info');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const client = new Client({ disableEveryone: true });
+const client = new Client({disableEveryone: true});
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
 const queue = new Map();
-
-
-
 
 
 client.on('ready', () => {
@@ -46,6 +45,7 @@ client.on('error', console.error);
 client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
 
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
+
 
 client.on('message', async msg => { 
     if (msg.author.bot) return undefined;
@@ -96,7 +96,7 @@ client.on('message', async msg => {
                     .setColor('BLACK')
 		    
 			msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
-                    // eslint-disable-next-line max-depth
+                   
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
                             maxMatches: 1,
@@ -178,6 +178,7 @@ client.on('message', async msg => {
 
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
     const serverQueue = queue.get(msg.guild.id);
+    console.log(video);
         const song = {
             id: video.id,
             title: Util.escapeMarkdown(video.title),
@@ -223,11 +224,12 @@ function play(guild, song) {
         return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
     }
 
-    const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
-        .on('end', () => {
-            console.log('Song ended.');
-            serverQueue.songs.shift();
-            play(guild, serverQueue.songs[0]);
+	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+		.on('end', reason => {
+			if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
+			else console.log(reason);
+			serverQueue.songs.shift();
+			play(guild, serverQueue.songs[0]);
         })
         .on('error', error => console.log(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 100);
