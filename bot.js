@@ -220,7 +220,7 @@ function play(guild, song) {
 	console.log('Song leved.');
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
-        return serverQueue.connection.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
+        return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
     }
 
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
