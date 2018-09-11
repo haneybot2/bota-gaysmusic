@@ -89,7 +89,7 @@ client.on('message', async msg => {
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
-                    .setAuthor(`.A-Music`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
+                    .setAuthor(`.A-Music`, `https://goo.gl/jHxBTt`)
 		    .setTitle(`**Song selection** :`)
                     .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
@@ -138,7 +138,7 @@ client.on('message', async msg => {
         if (!serverQueue) return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
         if (!args[1]) return msg.channel.send(`:speaker: **Current volume is:** ${serverQueue.volume}`)
         serverQueue.volume = args[1];
-        serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 100);
+        serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 200);
         return msg.channel.send(`:loud_sound: **Volume:** ${args[1]}`);
     } else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -146,7 +146,7 @@ client.on('message', async msg => {
         if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue**.').then(message =>{message.delete(5000)})
 	let index = 0;
 	const embedqu = new Discord.RichEmbed()
-	.setAuthor(`.A-Queue`, `https://cdn.discordapp.com/attachments/481762378787323904/483620699412627466/1.png`)
+	.setAuthor(`.A-Queue`, `https://goo.gl/jHxBTt`)
 	.setTitle("**.A-Queue List :**")
 	.addField('__Now Playing__  :musical_note: ' , `**${serverQueue.songs[0].title}**`,true)
 	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
@@ -188,7 +188,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 voiceChannel: voiceChannel,
                 connection: null,
                 songs: [],
-                volume: 50,
+                volume: 100,
                 playing: true
             };
             queue.set(msg.guild.id, queueConstruct);
