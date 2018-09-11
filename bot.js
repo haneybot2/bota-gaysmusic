@@ -216,6 +216,7 @@ function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
     if (!song) {
+	console.log('Song leved.');
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
