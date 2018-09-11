@@ -134,10 +134,10 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
-	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch (error) {
-                console.error(`I could not join the voice channel: **${error}**`);
-                return msg.channel.send(`I could not join the voice channel: **${error}**!`);
-	}
+	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch(error =>{
+	console.error(`I could not join the voice channel: **${error}**`);
+        return msg.channel.send(`I could not join the voice channel: **${error}**!`);
+	});
         return msg.channel.send('**:white_check_mark: Joind.**');
     } else if (msg.content.startsWith(`${PREFIX}vol`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
