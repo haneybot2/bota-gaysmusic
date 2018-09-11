@@ -94,7 +94,7 @@ client.on('message', async msg => {
                     .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
                     .setColor('BLACK')
 		    
-			msg.channel.sendEmbed(embed1).then(message =>{message.delete(20000)})
+			msg.channel.sendEmbed(embed1).then(message =>{message.delete(15000)})
                    
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
@@ -197,7 +197,6 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             queueConstruct.songs.push(song);
 
             try {
-		(msg =>{msg.delete()})
                 var connection = await voiceChannel.join();
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
@@ -208,7 +207,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             }
         } else {
             serverQueue.songs.push(song);
-            if (playlist) return msg.channel.send(`tt3`);
+            if (playlist) return undefined;
             else return msg.channel.send(`:white_check_mark: \`\`${song.title}\`\` Added to **.A-Queue**!`)
         }
         return undefined;
@@ -221,7 +220,7 @@ function play(guild, song) {
 	console.log('Song leved.');
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
-        return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
+        return serverQueue.connection.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
     }
 
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
