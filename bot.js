@@ -36,6 +36,7 @@ client.on('ready', () => {
   console.log('╚[════════════]╝')
   console.log('')
   console.log('')
+  console.log('Yo this ready!')
 });
 
 client.on('warn', console.warn);
