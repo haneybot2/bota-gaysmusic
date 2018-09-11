@@ -172,7 +172,7 @@ client.on('message', async msg => {
         return msg.channel.send(':information_source: **There is nothing playing**.').then(message =>{message.delete(5000)})
     }
 
-    return msg.channel.send(`tt1`);
+    return undefined;
 });
 
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
@@ -208,10 +208,10 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
             }
         } else {
             serverQueue.songs.push(song);
-            if (playlist) return undefined;
+            if (playlist) return msg.channel.send(`tt3`);
             else return msg.channel.send(`:white_check_mark: \`\`${song.title}\`\` Added to **.A-Queue**!`)
         }
-        return msg.channel.send(`tt2`);
+        return undefined;
 }
 
 function play(guild, song) {
