@@ -64,20 +64,6 @@ client.on('message', msg => {
 	
       });
 ///////////////////////////////////
-client.on('message', msg => {
-  if (msg.content.startsWith(PREFIX + "datamusic")) {
-     if (!msg.author.id === '454527533279608852') return undefined;
-    msg.channel.send({
-embed: new Discord.RichEmbed() 
-  .setColor(`#ff0303`)
-  .addField('**الذاكرة المستخدمة 💾**', `${(process.memoryUsage().rss / 1000000).toFixed()}MB`, true)
-       .addField('**سرعة الاتصال📡**' , `${Date.now() - msg.createdTimestamp}` + ' ms')
-      .addField('**وقت الاقلاع⌚**', timeCon(process.uptime()), true)
-      .addField('**استخدام المعالج💿**', `${(process.cpuUsage().rss / 10000).toFixed()}%`, true)
-   })
-  }
-});
-///////////////////////////////////
 ///////////////////////////////////
 ///////////////////////////////////
 client.on('message', async msg => { 
