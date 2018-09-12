@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
 const { Client, Util } = require('discord.js');
+const client = new Client({disableEveryone: true});
 const { PREFIX, GOOGLE_API_KEY } = require('./config.js');
 const getYoutubeID = require('get-youtube-id');
 const fetchVideoInfo = require('youtube-info');
+const child_process = require("child_process");
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const client = new Client({disableEveryone: true});
 
 const youtube = new YouTube(GOOGLE_API_KEY);
 
@@ -45,7 +46,26 @@ client.on('error', console.error);
 client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
 
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
+client.on('message', msg => {
+    var argresult = msg.content.split(' ').slice(1).join(' ');
 
+    if (msg.content === PREFIX + "restart") {
+        if (!msg.author.id === '454527533279608852') return undefined;
+            console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            console.log(`⚠️ Bot restarting... ⚠️`);
+            console.log("===============================================\n\n");
+            client.destroy();
+            child_process.fork(__dirname + "/bot.js");
+            console.log(`Bot Successfully Restarted`);
+        }
+	
+      });
+///////////////////////////////////
+///////////////////////////////////
+///////////////////////////////////
 client.on('message', async msg => { 
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(PREFIX)) return undefined;
