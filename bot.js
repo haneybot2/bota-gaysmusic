@@ -49,7 +49,7 @@ client.on('message', async msg => {
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(PREFIX)) return undefined;
 
-    const args = msg.content.split(' ').slice(1);
+    const args = msg.content.split(' ');
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
     const serverQueue = queue.get(msg.guild.id);
@@ -58,6 +58,8 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}play command in ${msg.guild.name}`);
         const voiceChannel = msg.member.voiceChannel;
+        let args11 = msg.content.split(" ").slice(1);
+	var argsnot = args11.slice(1).join(' ');
         if (!voiceChannel) return msg.channel.send(":x:** You need to be in a voice channel**!");
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
 		if (!permissions.has('CONNECT')) {
@@ -66,7 +68,7 @@ client.on('message', async msg => {
 		if (!permissions.has('SPEAK')) {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
                 }
-	        if (!args[0]) {
+	        if (!argsnot[0]) {
                         return msg.channel.send("**:x: Please specify a filename.**");
                 }
         
