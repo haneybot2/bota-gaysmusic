@@ -69,11 +69,12 @@ client.on('message', msg => {
 client.on('message', async msg => { 
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(PREFIX)) return undefined;
+
     const args = msg.content.split(' ');
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
     const serverQueue = queue.get(msg.guild.id);
-    let argsnot = msg.content.split(" ").slice(1);
+    var argsnot = msg.content.split(" ").slice(1);
 
     if (msg.content.startsWith(`${PREFIX}play`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -104,17 +105,16 @@ client.on('message', async msg => {
                 var video = await youtube.getVideo(url);
             } catch (error) {
                 try {
-		    voiceChannel.join().then(connection => console.log('Connected!'));
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
+		    .setColor('BLACK')
                     .setAuthor(`.A-Music`, `https://goo.gl/jHxBTt`)
 		    .setTitle(`**Song selection** :`)
-                    .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`)
-                    .setColor('BLACK')
-		    
-			msg.channel.sendEmbed(embed1).then(message =>{message.delete(15000)})
-                   
+                    .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`);
+		    voiceChannel.join().then(connection => console.log('Connected!'));
+		    msg.channel.sendEmbed(embed1).then(message =>{message.delete(15000)})
+			
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
                             maxMatches: 1,
@@ -129,7 +129,7 @@ client.on('message', async msg => {
                     var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
                 } catch (err) {
                     console.error(err);
-                    return msg.channel.send(":x:  **I don`t get any search result.**").then(message =>{message.delete(5000)})
+                    return msg.channel.send(":x:  **I don`t get any search result.**").then(message =>{message.delete(5000)});
                 }
             }
 
@@ -156,8 +156,7 @@ client.on('message', async msg => {
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
 	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch(error =>{
 	console.error(`I could not join the voice channel: **${error}**`);
-        return msg.channel.send(`I could not join the voice channel: **${error}**!`);
-	});
+        return msg.channel.send(`I could not join the voice channel: **${error}**!`) });
         return msg.channel.send('**:white_check_mark: Joind.**');
     } else if (msg.content.startsWith(`${PREFIX}vol`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -171,13 +170,13 @@ client.on('message', async msg => {
     } else if (msg.content.startsWith(`${PREFIX}queue`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}queue command in ${msg.guild.name}`);
-        if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue.**').then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(':information_source: **no_more_Queue.**').then(message =>{message.delete(5000)});
 	let index = 0;
 	const embedqu = new Discord.RichEmbed()
 	.setAuthor(`.A-Queue`, `https://goo.gl/jHxBTt`)
 	.setTitle("**.A-Queue List :**")
 	.addField('__Now Playing__  :musical_note: ' , `**${serverQueue.songs[0].title}**`,true)
-	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`)
+	.addField(':musical_score:  __UP NEXT__ :musical_score: ' , `${serverQueue.songs.map(song => `**[${++index}] -** ${song.title}`).join('\n')}`);
 	return msg.channel.sendEmbed(embedqu);
      }  else if (msg.content.startsWith(`${PREFIX}pause`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -185,7 +184,7 @@ client.on('message', async msg => {
         if (serverQueue && serverQueue.playing) {
         serverQueue.playing = false;
         serverQueue.connection.dispatcher.pause();
-        return msg.channel.send('k :unamused:')
+        return msg.channel.send('k :unamused:');
         }
         return msg.channel.send(':information_source: **There is nothing playing.**').then(message =>{message.delete(5000)})
     } else if (msg.content.startsWith(`${PREFIX}resume`)) {
@@ -195,7 +194,7 @@ client.on('message', async msg => {
         if (serverQueue && !serverQueue.playing) {
             serverQueue.playing =  true;
             serverQueue.connection.dispatcher.resume();
-            return msg.channel.send('k :slight_smile:')
+            return msg.channel.send('k :slight_smile:');
         }
         return msg.channel.send(':information_source: **There is nothing playing.**').then(message =>{message.delete(5000)})
     }
