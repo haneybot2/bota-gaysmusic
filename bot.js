@@ -1,16 +1,14 @@
 const Discord = require('discord.js');
-const { Client, Util } = require('discord.js');
-const client = new Client({disableEveryone: true});
-const { PREFIX, GOOGLE_API_KEY } = require('./config.js');
+const Util = require('discord.js');
 const getYoutubeID = require('get-youtube-id');
 const fetchVideoInfo = require('youtube-info');
-const child_process = require("child_process");
 const YouTube = require('simple-youtube-api');
-const ytdl = require('ytdl-core');
-
-const youtube = new YouTube(GOOGLE_API_KEY);
-
+const youtube = new YouTube("AIzaSyAdORXg7UZUo7sePv97JyoDqtQVi3Ll0b8");
 const queue = new Map();
+const ytdl = require('ytdl-core');
+const gif = require("gif-search");
+const client = new Discord.Client({disableEveryone: true});
+const prefix = "#";
 
 
 client.on('ready', () => {
@@ -46,35 +44,15 @@ client.on('error', console.error);
 client.on('disconnect', () => console.log('I just disconnected, making sure you know, I will reconnect now...'));
 
 client.on('reconnecting', () => console.log('I am reconnecting now!'));
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
-client.on('message', msg => {
-    var argresult = msg.content.split(' ').slice(1).join(' ');
 
-    if (msg.content === PREFIX + "restart") {
-        if (!msg.author.id === '454527533279608852') return undefined;
-            console.log("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            console.log(`⚠️ Bot restarting... ⚠️`);
-            console.log("===============================================\n\n");
-            client.destroy();
-            child_process.fork(__dirname + "/bot.js");
-            console.log(`Bot Successfully Restarted`);
-        }
-	
-      });
-///////////////////////////////////
-///////////////////////////////////
-///////////////////////////////////
 client.on('message', async msg => { 
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(PREFIX)) return undefined;
 
-    const args = msg.content.split(' ');
+    const args = msg.content.split(' ').slice(1);
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
     const serverQueue = queue.get(msg.guild.id);
-    var argsnot = msg.content.split(" ").slice(1);
 
     if (msg.content.startsWith(`${PREFIX}play`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
@@ -88,7 +66,7 @@ client.on('message', async msg => {
 		if (!permissions.has('SPEAK')) {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
                 }
-	        if (!argsnot[0]) {
+	        if (!args[0]) {
                         return msg.channel.send("**:x: Please specify a filename.**");
                 }
         
@@ -105,6 +83,7 @@ client.on('message', async msg => {
                 var video = await youtube.getVideo(url);
             } catch (error) {
                 try {
+		    voiceChannel.join().then(connection => console.log('Connected!'));
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                     const embed1 = new Discord.RichEmbed()
@@ -112,8 +91,8 @@ client.on('message', async msg => {
                     .setAuthor(`.A-Music`, `https://goo.gl/jHxBTt`)
 		    .setTitle(`**Song selection** :`)
                     .setDescription(`${videos.map(video2 => `[**${++index} **] \`${video2.title}\``).join('\n')}`);
-		    voiceChannel.join().then(connection => console.log('Connected!'));
-		    msg.channel.sendEmbed(embed1).then(message =>{message.delete(15000)})
+			
+		    		msg.channel.sendEmbed(embed1).then(message =>{message.delete(15000)});
 			
                     try {
                         var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
@@ -156,7 +135,8 @@ client.on('message', async msg => {
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
 	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch(error =>{
 	console.error(`I could not join the voice channel: **${error}**`);
-        return msg.channel.send(`I could not join the voice channel: **${error}**!`) });
+        return msg.channel.send(`I could not join the voice channel: **${error}**!`);
+	});
         return msg.channel.send('**:white_check_mark: Joind.**');
     } else if (msg.content.startsWith(`${PREFIX}vol`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
