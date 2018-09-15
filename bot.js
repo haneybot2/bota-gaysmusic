@@ -68,7 +68,7 @@ client.on('message', async msg => {
 			return msg.channel.send("**I can not speak in this room, please make sure that i have full perms for this**!");
                 }
 	        if (!args1[0]) {
-                       msg.channel.send('**Please supply a number**');
+                       msg.channel.send('**:x: Please specify a filename.**');
                        return undefined;
                 }
         
