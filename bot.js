@@ -58,8 +58,8 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return;
         console.log(`${msg.author.tag} has been used the ${PREFIX}play command in ${msg.guild.name}`);
         const voiceChannel = msg.member.voiceChannel;
-        let args11 = msg.content.split(" ").slice(1);
-	var argsnot = args11.slice(1).join(' ');
+        let args11 = msg.content.split(" ").slice(" ");
+	var argsnot = args11.slice(" ").join(' ');
         if (!voiceChannel) return msg.channel.send(":x:** You need to be in a voice channel**!");
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
 		if (!permissions.has('CONNECT')) {
