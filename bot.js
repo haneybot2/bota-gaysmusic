@@ -235,10 +235,10 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 
 function play(guild, song, connection, msg, args) {
     const serverQueue = queue.get(guild.id);
-    const YTDL = require('ytdl-core');
+    var ytdl = require('ytdl-core');
     var servers = {};
     var server = servers[msg.guild.id];
-    server.dispatcher = connection.playStream(YTDL(args[0]), {filter: "audioonly"});
+    server.dispatcher = connection.playStream(ytdl(args[0]), {filter: "audioonly"});
     server.queue.shift();
 	
     if (!song) {
