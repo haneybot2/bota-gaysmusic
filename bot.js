@@ -7,8 +7,11 @@ const youtube = new YouTube("AIzaSyAdORXg7UZUo7sePv97JyoDqtQVi3Ll0b8");
 const queue = new Map();
 const ytdl = require('ytdl-core');
 const gif = require("gif-search");
+const nodeopus = require('node-opus');
+const ffmpeg = require('ffmpeg');
 const client = new Discord.Client({disableEveryone: true});
 const PREFIX = "#";
+var servers = {};
 
 
 client.on('ready', () => {
@@ -58,7 +61,7 @@ client.on('message', async msg => {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return undefined;
         console.log(`${msg.author.tag} has been used the ${PREFIX}play command in ${msg.guild.name}`);
         const voiceChannel = msg.member.voiceChannel;
-        let args1 = msg.content.split(" ").slice(1);
+        let args1 = msg.content.split(' ').slice(1);
         if (!voiceChannel) return msg.channel.send(":x:** You need to be in a voice channel**!");
 		const permissions = voiceChannel.permissionsFor(msg.client.user);
 		if (!permissions.has('CONNECT')) {
@@ -136,13 +139,14 @@ client.on('message', async msg => {
         console.log(`${msg.author.tag} has been used the ${PREFIX}repeat command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
         if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could repeat for you.**").then(message =>{message.delete(5000)})
-        handleVideo(video, msg, msg.member.voiceChannel);
-        return msg.channel.send(`****:repeat: Repeating****`);
+        msg.channel.send(`**:repeat: Repeating \`\`${serverQueue.songs[0].title}\`\`**`);
+        return handleVideo(video, msg, msg.member.voiceChannel);
     } else if (msg.content.startsWith(`${PREFIX}join`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return undefined;
         console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
         if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
-	msg.member.voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch(error =>{
+	const voiceChannel = msg.member.voiceChannel
+	voiceChannel.join().then(connection => console.log('joind to voiceChannel!')).catch(error =>{
 	console.error(`I could not join the voice channel: **${error}**`);
         return msg.channel.send(`I could not join the voice channel: **${error}**!`);
 	});
@@ -229,15 +233,25 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
         return undefined;
 }
 
-function play(guild, song) {
+function play(guild, song ,connection, msh, args) {
     const serverQueue = queue.get(guild.id);
-
+	var server = servers[msg.guild.id];
+    server.dispatcher = connection.playStream(YTDL(args[0]), {filter: "audioonly"});
+    server.queue.shift();
+	
     if (!song) {
 	console.log('Song leved.');
         serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return serverQueue.textChannel.send(`:stop_button: **.A-Queue** finished!!`);
     }
+	
+
+	server.dispatcher
+		.on('end', function() {
+            if (server.queue[0]) play(connection, msg);
+            else connection.disconnect();
+        })
 
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
 		.on('end', reason => {
