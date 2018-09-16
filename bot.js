@@ -221,9 +221,9 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
             } catch (error) {
-                console.error(`I could not join the voice channel: **${error}**`);
+                console.error(`I could not speak the voice channel: **${error}**`);
                 queue.delete(msg.guild.id);
-                return msg.channel.send(`I could not join the voice channel: **${error}**!`);
+                return msg.channel.send(`I could not speak the voice channel: **${error}**!`);
             }
         } else {
             serverQueue.songs.push(song);
