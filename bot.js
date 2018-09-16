@@ -11,7 +11,7 @@ const nodeopus = require('node-opus');
 const ffmpeg = require('ffmpeg');
 const client = new Discord.Client({disableEveryone: true});
 const PREFIX = "#";
-var servers = {};
+
 
 
 client.on('ready', () => {
@@ -235,7 +235,8 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
 
 function play(guild, song ,connection, msg, args) {
     const serverQueue = queue.get(guild.id);
-	var server = servers[msg.guild.id];
+    var servers = {};
+    var server = servers[msg.guild.id];
     server.dispatcher = connection.playStream(YTDL(args[0]), {filter: "audioonly"});
     server.queue.shift();
 	
@@ -247,8 +248,7 @@ function play(guild, song ,connection, msg, args) {
     }
 	
 
-	server.dispatcher
-		.on('end', function() {
+	server.dispatcher.on('end', function() {
             if (server.queue[0]) play(connection, msg);
             else connection.disconnect();
         })
