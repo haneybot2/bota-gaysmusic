@@ -221,7 +221,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
                 queueConstruct.connection = connection;
                 play(msg.guild, queueConstruct.songs[0]);
             } catch (error) {
-                console.error(`I could not speak the voice channel: **${error}**`);
+                console.error(`I could not speak the voice channel: ${error}`);
                 queue.delete(msg.guild.id);
                 return msg.channel.send(`I could not speak the voice channel: **${error}**!`);
             }
@@ -233,8 +233,9 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
         return undefined;
 }
 
-function play(guild, song ,connection, msg, args) {
+function play(guild, song, connection, msg, args) {
     const serverQueue = queue.get(guild.id);
+    const YTDL = require('ytdl-core');
     var servers = {};
     var server = servers[msg.guild.id];
     server.dispatcher = connection.playStream(YTDL(args[0]), {filter: "audioonly"});
@@ -251,7 +252,7 @@ function play(guild, song ,connection, msg, args) {
 	server.dispatcher.on('end', function() {
             if (server.queue[0]) play(connection, msg);
             else connection.disconnect();
-        })
+        });
 
 	const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
 		.on('end', reason => {
