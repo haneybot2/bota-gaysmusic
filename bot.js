@@ -233,7 +233,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
         return undefined;
 }
 
-function play(guild, song ,connection, msh, args) {
+function play(guild, song ,connection, msg, args) {
     const serverQueue = queue.get(guild.id);
 	var server = servers[msg.guild.id];
     server.dispatcher = connection.playStream(YTDL(args[0]), {filter: "audioonly"});
