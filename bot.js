@@ -249,7 +249,9 @@ function play(guild, song, connection, msg, args) {
     }
 	
 
-	server.dispatcher.on('end', function() {
+       server.dispatcher.on('end', reason => {
+	    if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
+	    console.log(reason);
             if (server.queue[0]) play(connection, msg);
             else connection.disconnect();
         });
