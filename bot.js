@@ -131,6 +131,13 @@ client.on('message', async msg => {
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end('Stop command has been used!');
         return msg.channel.send('k :cry:');
+    } else if (msg.content.startsWith(`${PREFIX}repeat`)) {
+	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return undefined;
+        console.log(`${msg.author.tag} has been used the ${PREFIX}repeat command in ${msg.guild.name}`);
+        if (!msg.member.voiceChannel) return msg.channel.send(":x:**You are not in a voice channel**!").then(message =>{message.delete(5000)})
+        if (!serverQueue) return msg.channel.send(":information_source: **There is nothing playing that I could repeat for you.**").then(message =>{message.delete(5000)})
+        handleVideo(video, msg, msg.member.voiceChannel);
+        return msg.channel.send(`****:repeat: Repeating****`);
     } else if (msg.content.startsWith(`${PREFIX}join`)) {
 	if (!msg.member.hasPermission('MANAGE_MESSAGES')) return undefined;
         console.log(`${msg.author.tag} has been used the ${PREFIX}join command in ${msg.guild.name}`);
